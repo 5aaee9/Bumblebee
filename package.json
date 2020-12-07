@@ -13,6 +13,7 @@
         "@types/node": "^14.14.10",
         "@types/node-fetch": "^2.5.7",
         "@zerollup/ts-transform-paths": "^1.7.18",
+        "cross-env": "^7.0.3",
         "eslint": "^7.15.0",
         "eslint-config-indexyz": "^1.0.0",
         "ts-node": "^9.1.1",
