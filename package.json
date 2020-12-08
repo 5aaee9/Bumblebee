@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "node-fetch": "^2.6.1",
-        "ora": "^5.1.0"
+        "ora": "^5.1.0",
+        "xml-formatter": "^2.4.0"
     }
 }

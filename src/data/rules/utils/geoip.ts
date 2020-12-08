@@ -1,6 +1,7 @@
 import { AllOptions } from '@/types/client'
+import { DirectSymbol } from '@/utils/builtin'
 
-const proxy = 'DIRECT'
+const proxy = DirectSymbol
 
 const items: AllOptions[] = [{
     type: 'GEO_IP',

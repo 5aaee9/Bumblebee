@@ -1,48 +1,9 @@
 import { AllOptions } from '@/types/client'
+import { DirectSymbol } from '@/utils/builtin'
 
-const proxy = 'DIRECT'
+const proxy = DirectSymbol
 
 const items: AllOptions[] = [{
-    type: 'DOMAIN_SUFFIX',
-    domain: 'acg.tv',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'acgvideo.com',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'b23.tv',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'biliapi.com',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'biliapi.net',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'bilibili.com',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'biligame.com',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'biligame.net',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'hdslb.com',
-    proxy,
-}, {
-    type: 'DOMAIN_SUFFIX',
-    domain: 'im9.com',
-    proxy,
-}, {
     type: 'USER_AGENT',
     agent: '*bili*',
     proxy,
@@ -50,6 +11,21 @@ const items: AllOptions[] = [{
     type: 'DOMAIN_KEYWORD',
     keyword: 'bilibili',
     proxy,
-}]
+}, ...([
+    'acg.tv',
+    'acgvideo.com',
+    'b23.tv',
+    'biliapi.com',
+    'biliapi.net',
+    'bilibili.com',
+    'biligame.com',
+    'biligame.net',
+    'hdslb.com',
+    'im9.com',
+].map(it => ({
+    type: 'DOMAIN_SUFFIX',
+    domain: it,
+    proxy,
+})) as AllOptions[]) ]
 
 export default items

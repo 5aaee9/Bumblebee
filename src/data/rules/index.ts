@@ -8,11 +8,11 @@ module.exports = [
     // 网易云音乐
     ...require('./media/netease_music').default,
 
-    // GitHub
-    // ...require('./github').default,
+    // 微软
+    ...require('./software/microsoft').default,
 
-    // Clash 代理
-    ...require('./utils/clash').default,
+    // 代理软件
+    ...require('./utils/proxies').default,
 
     // 地域代理
     ...require('./utils/geoip').default,

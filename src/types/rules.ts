@@ -1,40 +1,42 @@
+import { Proxy } from '@/utils/builtin'
+
 export type RuleProcessName = {
     type: 'PROCESS_NAME'
     processName: string
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleDomainSuffix = {
     type: 'DOMAIN_SUFFIX'
     domain: string
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleFinal = {
     type: 'FINAL'
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleUserAgent = {
     type: 'USER_AGENT'
     agent: string
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleDomain = {
     type: 'DOMAIN'
     domain: string
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleDomainKeyword = {
     type: 'DOMAIN_KEYWORD'
     keyword: string
-    proxy: string
+    proxy: Proxy
 }
 
 export type RuleGeoIP = {
     type: 'GEO_IP'
     geo: string
-    proxy: string
+    proxy: Proxy
 }
