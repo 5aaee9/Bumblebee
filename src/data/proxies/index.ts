@@ -1,6 +1,6 @@
 import { AllProxies } from '@/types/client'
 
-module.exports = [{
+export default [{
     type: 'socks5',
     address: '127.0.0.1',
     port: 2801,

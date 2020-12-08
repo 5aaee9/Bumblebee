@@ -1,6 +1,6 @@
 import { AllOptions } from '@/types/client';
 
-module.exports = [
+export default [
     /* eslint-disable */
     // Bilibili 视频
     ...require('./media/bilibili').default,
@@ -16,6 +16,9 @@ module.exports = [
 
     // 地域代理
     ...require('./utils/geoip').default,
+
+    // IP range direct
+    ...require('./utils/local').default,
 
     {
         type: 'FINAL',

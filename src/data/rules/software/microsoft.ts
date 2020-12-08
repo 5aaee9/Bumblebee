@@ -11,6 +11,9 @@ const items: AllOptions[] = [
     'msedge.net',
     'office.com',
     'office365.com',
+    'azureedge.net',
+    'bing.com',
+    'msn.com',
 ].map(it => ({
     type: 'DOMAIN_SUFFIX',
     domain: it,

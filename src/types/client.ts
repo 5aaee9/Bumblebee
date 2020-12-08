@@ -10,15 +10,34 @@ export type AllOptions = rules.RuleProcessName
 | rules.RuleDomain
 | rules.RuleDomainKeyword
 | rules.RuleGeoIP
+| rules.RuleIPRange
 
 export type AllProxies = proxies.Socks5Proxy
 
 export type KeywordMapping = Partial<Record<AllOptions['type'], string>>
 
+export type RenderRuleType = 'multi' | 'singleton'
+
 export interface Client {
     supportKeyword(keyword: AllOptions): boolean
     supportProxy(keyword: AllProxies): boolean
-    renderRule(option: AllOptions): string
     renderProxy(proxy: AllProxies): string
     getRender(): Render
 }
+
+export type MultiRuleClient = {
+    renderType: 'multi'
+    renderRules(options: AllOptions[]): string[]
+}
+
+export type SingletonRuleClient = {
+    renderType: 'singleton'
+    renderRule(option: AllOptions): string
+}
+
+export type RenderConf = {
+    proxies: AllProxies[]
+    rules: AllOptions[]
+}
+
+export type ProbClient = (Client & (MultiRuleClient | SingletonRuleClient))

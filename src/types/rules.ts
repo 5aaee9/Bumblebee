@@ -40,3 +40,10 @@ export type RuleGeoIP = {
     geo: string
     proxy: Proxy
 }
+
+export type RuleIPRange = {
+    type: 'IP_RANGE'
+    ip: string
+    prefix: number
+    proxy: Proxy
+}

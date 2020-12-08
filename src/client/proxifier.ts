@@ -2,9 +2,17 @@ import { Client, AllOptions, AllProxies } from '@/types/client';
 import ProxifierRender from '@/config/proxifier'
 import { Render } from '@/types/config';
 import {
-    BuiltinReplacement, DirectSymbol, RejectSymbol, getProxyName, Proxy, AllBuiltinSymbols,
+    BuiltinReplacement, DirectSymbol, RejectSymbol, getProxyName, Proxy,
 } from '@/utils/builtin'
+import * as r from '@/types/rules'
+import { parseCidr } from '@/utils/ip'
 
+
+function ipRange(it: r.RuleIPRange): string {
+    const parsed = parseCidr(it.ip, it.prefix)
+
+    return `${parsed.begin} - ${parsed.end}`
+}
 export default class ProxifierClient implements Client {
     static replacement: BuiltinReplacement = {
         [DirectSymbol]: 'Direct',
@@ -21,6 +29,7 @@ export default class ProxifierClient implements Client {
             'DOMAIN_KEYWORD',
             'DOMAIN_SUFFIX',
             'PROCESS_NAME',
+            'IP_RANGE',
             'FINAL',
         ].includes(keyword.type)
     }
@@ -47,38 +56,73 @@ export default class ProxifierClient implements Client {
 
         return `<Action type="Proxy">${this.proxiesIdCache.get(proxy)}</Action>`
     }
+    public readonly renderType = 'multi'
+    renderRules(options: AllOptions[]): string[] {
+        const result: string[] = []
 
-    renderRule(option: AllOptions): string {
-        switch (option.type) {
-            case 'DOMAIN':
-                return this.makeRule(`${option.type} - ${option.domain}`, `
-                    <Targets>${option.domain}</Targets>
-                    ${this.makeAction(option.proxy)}
-                `)
+        const ruleGroup: {
+            [key: string]: AllOptions[]
+        } = {}
 
-            case 'DOMAIN_SUFFIX':
-                return this.makeRule(`${option.type} - ${option.domain}`, `
-                    <Targets>*.${option.domain}</Targets>
-                    ${this.makeAction(option.proxy)}
-                `)
+        options.forEach(it => {
+            const keyName = `${it.type}-${getProxyName(it.proxy, ProxifierClient.replacement)}`
 
-            case 'DOMAIN_KEYWORD':
-                return this.makeRule(`${option.type} - ${option.keyword}`, `
-                    <Targets>*${option.keyword}*</Targets>
-                    ${this.makeAction(option.proxy)}
-                `)
+            if (ruleGroup[keyName]) {
+                ruleGroup[keyName].push(it)
+            } else {
+                ruleGroup[keyName] = [it]
+            }
+        })
 
-            case 'PROCESS_NAME':
-                return this.makeRule(`${option.type} - ${option.processName}`, `
-                    <Applications>${option.processName}</Applications>
-                    ${this.makeAction(option.proxy)}
-                `)
-            case 'FINAL':
-                return this.makeRule('Default', this.makeAction(option.proxy))
+        for (const [name, rs] of Object.entries(ruleGroup)) {
+            const [ruleItem] = rs
+            const typeName = ruleItem.type
 
-            default:
-                throw new Error(`Not support ${option.type} in Proxifier`)
+            switch (typeName) {
+                case 'DOMAIN':
+                    result.push(this.makeRule(name, `
+                        <Targets>${rs.map(it => (it as r.RuleDomain).domain).join('; ')}</Targets>
+                        ${this.makeAction(ruleItem.proxy)}
+                    `))
+                    break
+
+                case 'DOMAIN_SUFFIX':
+                    result.push(this.makeRule(name, `
+                        <Targets>${rs.map(it => `*.${(it as r.RuleDomainSuffix).domain}`).join('; ')}</Targets>
+                        ${this.makeAction(ruleItem.proxy)}
+                    `))
+                    break
+
+                case 'DOMAIN_KEYWORD':
+                    result.push(this.makeRule(name, `
+                        <Targets>${rs.map(it => `*${(it as r.RuleDomainKeyword).keyword}*`).join('; ')}</Targets>
+                        ${this.makeAction(ruleItem.proxy)}
+                    `))
+                    break
+
+                case 'PROCESS_NAME':
+                    result.push(this.makeRule(name, `
+                        <Applications>${rs.map(it => (it as r.RuleProcessName).processName).join('; ')}</Applications>
+                        ${this.makeAction(ruleItem.proxy)}
+                    `))
+                    break
+                case 'FINAL':
+                    result.push(this.makeRule('Default', this.makeAction(ruleItem.proxy)))
+                    break
+
+                case 'IP_RANGE':
+                    result.push(this.makeRule(name, `
+                        <Targets>${rs.map(it => ipRange(it as r.RuleIPRange)).join('; ')}</Targets>
+                        ${this.makeAction(ruleItem.proxy)}
+                    `))
+                    break
+
+                default:
+                    throw new Error(`Not support ${name} in Proxifier`)
+            }
         }
+
+        return result
     }
 
     renderProxy(proxy: AllProxies): string {
