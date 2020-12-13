@@ -1,5 +1,5 @@
 import { Client, AllOptions, AllProxies } from '@/types/client';
-import ProxifierRender from '@/config/proxifier'
+import { ProxifierRender } from '@/config/proxifier'
 import { Render } from '@/types/config';
 import {
     BuiltinReplacement, DirectSymbol, RejectSymbol, getProxyName, Proxy,
@@ -13,7 +13,7 @@ function ipRange(it: r.RuleIPRange): string {
 
     return `${parsed.begin} - ${parsed.end}`
 }
-export default class ProxifierClient implements Client {
+export class ProxifierClient implements Client {
     static replacement: BuiltinReplacement = {
         [DirectSymbol]: 'Direct',
         [RejectSymbol]: 'Block',

@@ -1,7 +1,7 @@
 import { Render, RenderState } from '@/types/config';
 import format from 'xml-formatter'
 
-export default class ProxifierRender implements Render {
+export class ProxifierRender implements Render {
     render(state: RenderState): string {
         return format(`
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
