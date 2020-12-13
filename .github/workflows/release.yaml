@@ -27,4 +27,4 @@ jobs:
     - name: Upload to NPM Registry
       run: |
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}
-        npm publish
+        npm publish --access public
