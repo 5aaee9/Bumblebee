@@ -1,5 +1,5 @@
 {
-    "name": "bumblebee",
+    "name": "@indexyz/bumblebee",
     "version": "0.0.1",
     "main": "src/index.ts",
     "repository": "git@github.com:Indexyz/bumblebee.git",

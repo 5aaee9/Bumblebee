@@ -1,0 +1,30 @@
+name: Release NPM Package
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14
+
+    - name: Install
+      run: yarn install
+
+    - name: Eslint Test
+      run: yarn run lint
+
+    - name: Upload to NPM Registry
+      run: |
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}
+        npm publish
