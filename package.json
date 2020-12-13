@@ -1,7 +1,8 @@
 {
     "name": "@indexyz/bumblebee",
     "version": "0.0.1",
-    "main": "src/index.ts",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "repository": "git@github.com:Indexyz/bumblebee.git",
     "private": false,
     "license": "MIT",

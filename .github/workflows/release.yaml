@@ -24,6 +24,9 @@ jobs:
     - name: Eslint Test
       run: yarn run lint
 
+    - name: Build typescript
+      run: yarn run build
+
     - name: Upload to NPM Registry
       run: |
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}
